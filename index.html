@@ -2,61 +2,56 @@
 <html lang="fr">
 <head>
 <meta charset="UTF-8">
-<title>Léman Courses – Transport express</title>
+<title>LÉMAN COURSES – Commande</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <style>
 body{
   font-family:Arial,Helvetica,sans-serif;
-  background:#0B2A44;
+  background:linear-gradient(135deg,#0b2a44,#0f3d66);
+  color:#fff;
   padding:20px;
 }
 .card{
-  max-width:680px;
+  max-width:520px;
   margin:auto;
   background:#fff;
-  border-radius:18px;
+  color:#000;
+  border-radius:16px;
   padding:20px;
 }
-h1{text-align:center;color:#0B2A44;margin:0}
-.subtitle{text-align:center;font-size:13px;color:#555;margin-bottom:20px}
-
-label{font-size:13px;font-weight:bold}
-input,select,textarea{
+h1{text-align:center;color:#0b2a44;}
+label{font-weight:bold;font-size:13px;}
+input,select,button{
   width:100%;
-  padding:10px;
-  margin:6px 0 12px 0;
-}
-textarea{min-height:70px}
-.row{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:12px;
-}
-.price{
-  text-align:center;
-  font-size:30px;
-  color:#0B2A44;
-  margin:10px 0;
-}
-.detail{
-  text-align:center;
-  font-size:13px;
-  color:#444;
+  margin-top:6px;
+  padding:12px;
+  border-radius:8px;
+  border:1px solid #ccc;
 }
 button{
-  width:100%;
-  padding:12px;
-  margin-top:10px;
-  border:none;
-  border-radius:8px;
+  background:#0b2a44;
+  color:#fff;
   font-weight:bold;
   cursor:pointer;
 }
-.mail{background:#7f8c8d;color:#fff}
-.wa{background:#25D366;color:#fff}
-.notice{text-align:center;font-size:11px;color:#666;margin-top:8px}
-@media(max-width:600px){.row{grid-template-columns:1fr}}
+.price{
+  font-size:28px;
+  text-align:center;
+  margin:15px 0;
+  color:#0b2a44;
+}
+.info{
+  font-size:12px;
+  background:#f2f2f2;
+  padding:10px;
+  border-radius:8px;
+}
+.section{
+  margin-top:15px;
+  border-top:1px solid #ddd;
+  padding-top:15px;
+}
 </style>
 </head>
 
@@ -64,164 +59,164 @@ button{
 
 <div class="card">
 <h1>LÉMAN COURSES</h1>
-<div class="subtitle">Transport express 24h/24 – 7j/7</div>
 
-<div class="row">
-  <div>
-    <label>NPA départ</label>
-    <input id="npaDepart" value="1000" oninput="calculer()">
-  </div>
-  <div>
-    <label>NPA arrivée</label>
-    <input id="npaArrivee" value="1000" oninput="calculer()">
-  </div>
+<!-- CODES POSTAUX -->
+<div class="section">
+<label>NPA prise en charge</label>
+<input id="cpStart" placeholder="Ex: 1000">
+
+<label>NPA livraison</label>
+<input id="cpEnd" placeholder="Ex: 1200">
 </div>
 
-<label>Kilomètres (calcul automatique)</label>
-<input id="km" readonly>
-<div class="detail" id="kmInfo"></div>
+<!-- OPTIONS -->
+<div class="section">
+<label>Poids du colis (kg)</label>
+<input type="number" id="poids" min="1">
 
-<div class="row">
-  <div>
-    <label>Poids du colis (kg)</label>
-    <input id="poids" type="number" value="5" oninput="calculer()">
-  </div>
-  <div>
-    <label>Inter-villes ?</label>
-    <select id="interville" disabled>
-      <option>Non</option>
-      <option selected>Oui</option>
-    </select>
-  </div>
+<label>Service</label>
+<select id="service">
+<option value="normal">Normal</option>
+<option value="urgent">Urgent</option>
+<option value="express">Express</option>
+</select>
+
+<label>Période</label>
+<select id="horaire">
+<option value="jour">Jour</option>
+<option value="nuit">Nuit / Dimanche</option>
+</select>
+
+<button onclick="calculer()">Calculer le tarif</button>
 </div>
 
-<div class="row">
-  <div>
-    <label>Service</label>
-    <select id="service" onchange="calculer()">
-      <option value="normal">Normal</option>
-      <option value="urgent">Urgent</option>
-      <option value="express">Express</option>
-    </select>
-  </div>
-  <div>
-    <label>Horaire</label>
-    <select id="horaire" onchange="calculer()">
-      <option value="jour">Jour</option>
-      <option value="nuit">Nuit / Dimanche</option>
-    </select>
-  </div>
-</div>
+<div class="price" id="result">CHF —</div>
+<div class="info" id="detail"></div>
 
-<div class="price" id="prix">CHF 0.–</div>
-<div class="detail" id="detail"></div>
+<!-- FORMULAIRE CLIENT -->
+<div class="section">
+<h3>📦 Données client</h3>
 
-<hr>
+<label>Nom / Prénom</label>
+<input id="clientNom">
 
-<div class="row">
-  <div>
-    <label>Nom & Prénom</label>
-    <input id="nom">
-  </div>
-  <div>
-    <label>Téléphone</label>
-    <input id="tel">
-  </div>
-</div>
-
-<div class="row">
-  <div>
-    <label>Email (optionnel)</label>
-    <input id="email">
-  </div>
-  <div>
-    <label>Entreprise (optionnel)</label>
-    <input id="societe">
-  </div>
-</div>
+<label>Téléphone</label>
+<input id="clientTel">
 
 <label>Adresse prise en charge</label>
-<input id="adrDepart">
+<input id="pickupAdr">
+
+<h3>📍 Livraison</h3>
+
+<label>Nom / Prénom</label>
+<input id="livNom">
 
 <label>Adresse livraison</label>
-<input id="adrArrivee">
+<input id="livAdr">
 
 <label>Nature du colis</label>
 <input id="nature">
 
-<label>Remarques</label>
-<textarea id="remarque"></textarea>
-
-<button class="mail" onclick="envoyerMail()">Envoyer la commande par email</button>
-<button class="wa" onclick="envoyerWA()">Envoyer par WhatsApp</button>
-
-<div class="notice">
-Prix indicatif – confirmation avant prise en charge.<br>
-Colis &gt; 30 kg : devis spécial.
+<button id="sendBtn" disabled>Envoyer la commande</button>
 </div>
+
 </div>
 
 <script>
-function kmFromNPA(a,b){
-  return Math.abs(Number(a)-Number(b))*0.9+5;
+// ===== RÉFÉRENCES DOM =====
+const cpStart = document.getElementById("cpStart");
+const cpEnd = document.getElementById("cpEnd");
+const poidsInput = document.getElementById("poids");
+const serviceSelect = document.getElementById("service");
+const horaireSelect = document.getElementById("horaire");
+const result = document.getElementById("result");
+const detail = document.getElementById("detail");
+const sendBtn = document.getElementById("sendBtn");
+
+// ===== GRILLE TARIFAIRE =====
+const grille = [
+  {min:0,max:10,normal:6.5,urgent:43,express:30},
+  {min:11,max:30,normal:10,urgent:73,express:48},
+  {min:31,max:80,normal:13.5,urgent:103,express:66},
+  {min:81,max:150,normal:17,urgent:133,express:84},
+  {min:151,max:250,normal:20.5,urgent:163,express:102},
+  {min:251,max:500,normal:38,urgent:313,express:192},
+  {min:501,max:1500,normal:108,urgent:913,express:552}
+];
+
+// ===== COEFFICIENT POIDS =====
+function coefPoids(p){
+  if(p <= 5) return 1;
+  if(p <= 10) return 1.1;
+  if(p <= 20) return 1.25;
+  if(p <= 30) return 1.4;
+  return null;
 }
 
-function calculer(){
-  const npaD=npaDepart.value,npaA=npaArrivee.value;
-  let km=Math.round(kmFromNPA(npaD,npaA));
-  kmField=km;
-  document.getElementById("km").value=km;
-  document.getElementById("kmInfo").innerText="Distance calculée : "+km+" km";
+// ===== CALCUL DISTANCE (OSM) =====
+async function getKm(cp1, cp2){
+  const geo = async cp => {
+    const r = await fetch(
+      `https://nominatim.openstreetmap.org/search?format=json&limit=1&q=${cp},Switzerland`
+    );
+    const d = await r.json();
+    return d[0] ? [d[0].lon, d[0].lat] : null;
+  };
 
-  document.getElementById("interville").value=km>10?"Oui":"Non";
+  const A = await geo(cp1);
+  const B = await geo(cp2);
+  if(!A || !B) return null;
 
-  const poids=Number(poidsField=poids.value);
-  if(poids>30){prix.innerText="Devis spécial";return}
-
-  let base=20+km*1.2;
-  if(poids>5)base+=10;
-  if(poids>10)base+=20;
-  if(poids>20)base+=30;
-
-  if(service.value==="urgent")base+=40;
-  if(service.value==="express")base+=70;
-  if(horaire.value==="nuit")base*=1.25;
-
-  base=Math.round(base/5)*5;
-  prix.innerText="CHF "+base+".–";
-  detail.innerText=km+" km · "+poids+" kg · "+service.value.toUpperCase()+" · "+horaire.value.toUpperCase();
+  const r = await fetch(
+    `https://router.project-osrm.org/route/v1/driving/${A[0]},${A[1]};${B[0]},${B[1]}?overview=false`
+  );
+  const d = await r.json();
+  return Math.round(d.routes[0].distance / 1000);
 }
 
-function envoyerMail(){
-  const body=
-`Commande Léman Courses
-Client: ${nom.value}
-Téléphone: ${tel.value}
+// ===== CALCUL TARIF =====
+async function calculer(){
+  const poids = Number(poidsInput.value);
+  const service = serviceSelect.value;
+  const horaire = horaireSelect.value;
 
-Trajet:
-${adrDepart.value} → ${adrArrivee.value}
-Km: ${km.value}
+  if(!cpStart.value || !cpEnd.value || !poids){
+    alert("Veuillez remplir les champs nécessaires");
+    return;
+  }
 
-Poids: ${poids.value} kg
-Service: ${service.value}
-Horaire: ${horaire.value}
+  if(poids > 30){
+    alert("⚠️ Colis > 30 kg : devis spécial requis");
+    result.textContent = "Devis requis";
+    sendBtn.disabled = true;
+    return;
+  }
 
-Prix: ${prix.innerText}
+  result.textContent = "Calcul en cours…";
 
-Remarques:
-${remarque.value}`;
+  const km = await getKm(cpStart.value, cpEnd.value);
+  if(km === null){
+    result.textContent = "Erreur de calcul km";
+    return;
+  }
 
-  location.href="mailto:info@leman-courses.ch?subject=Commande transport&body="+encodeURIComponent(body);
+  const ligne = grille.find(g => km >= g.min && km <= g.max);
+  if(!ligne){
+    result.textContent = "Distance hors grille";
+    return;
+  }
+
+  let prix = ligne[service];
+  if(horaire === "nuit") prix *= 1.25;
+
+  prix *= coefPoids(poids);
+  prix = Math.round(prix / 5) * 5;
+
+  result.textContent = `CHF ${prix}.-`;
+  detail.textContent = `Distance : ${km} km · ${service.toUpperCase()} · ${poids} kg`;
+
+  sendBtn.disabled = false;
 }
-
-function envoyerWA(){
-  const txt=`Commande Léman Courses
-${prix.innerText}
-${detail.innerText}`;
-  window.open("https://wa.me/?text="+encodeURIComponent(txt));
-}
-
-calculer();
 </script>
 
 </body>
